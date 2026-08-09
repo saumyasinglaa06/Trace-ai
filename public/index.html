@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TRACE — Incident Checker</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: #eef2ff;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px;
+    }
+
+    header {
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 36px;
+    }
+
+    .subtitle {
+      color: #9ca3af;
+      margin-top: 8px;
+    }
+
+    .incident {
+      background: #171d32;
+      border: 1px solid #343c58;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: #7f1d1d;
+      color: #fecaca;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .title {
+      font-size: 27px;
+      margin: 15px 0;
+    }
+
+    .stats {
+      display: flex;
+      gap: 40px;
+      color: #cbd5e1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: #171d32;
+      border: 1px solid #343c58;
+      border-radius: 16px;
+      padding: 25px;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 19px;
+    }
+
+    .cause {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    li {
+      margin: 12px 0;
+      color: #dbe4f0;
+    }
+
+    .evidence {
+      padding: 12px;
+      margin: 10px 0;
+      background: #202740;
+      border-radius: 10px;
+    }
+
+    .source {
+      font-size: 12px;
+      color: #93c5fd;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 13px 22px;
+      border: 0;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    #status {
+      color: #94a3b8;
+      margin-top: 15px;
+    }
+
+    @media(max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <header>
+    <h1>TRACE</h1>
+    <div class="subtitle">
+      Technical Root-cause Analysis & Correlation Engine
+    </div>
+  </header>
+
+  <div id="app">
+    <div class="incident">
+      Loading incident...
+    </div>
+  </div>
+
+</div>
+
+<script>
+async function loadInvestigation() {
+  const app = document.getElementById("app");
+
+  try {
+    const response = await fetch("/api/investigate");
+    const data = await response.json();
+
+    const a = data.analysis;
+
+    app.innerHTML = `
+      <div class="incident">
+        <span class="badge">HIGH SEVERITY • INCIDENT DETECTED</span>
+
+        <div class="title">${data.incidentTitle}</div>
+
+        <div class="stats">
+          <div><strong>${data.customerCount}</strong> affected customers</div>
+          <div><strong>${a.confidence}%</strong> confidence</div>
+          <div><strong>${data.incidentId}</strong></div>
+        </div>
+      </div>
+
+      <div class="grid">
+
+        <div class="card">
+          <h2>Likely Root Cause</h2>
+          <div class="cause">${a.likelyCause}</div>
+        </div>
+
+        <div class="card">
+          <h2>🛠 Recommended Actions</h2>
+          <ul>
+            ${(a.recommendedActions || []).map(x => `<li>${x}</li>`).join("")}
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>Engineering Evidence</h2>
+
+          ${(a.githubEvidence || []).map(e => `
+            <div class="evidence">
+              <div class="source">GitHub • ${e.type}</div>
+              <strong>${e.title}</strong>
+              <div>${e.details}</div>
+            </div>
+          `).join("")}
+
+          ${(a.notionEvidence || []).map(e => `
+            <div class="evidence">
+              <div class="source">Notion</div>
+              <strong>${e.title}</strong>
+              <div>${e.details}</div>
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="card">
+          <h2>TRACE Reasoning</h2>
+          <p>
+            TRACE correlated multiple customer complaints into a single
+            incident instead of treating each complaint independently.
+          </p>
+          <p>
+            It then analyzed the incident pattern and produced a
+            root-cause hypothesis with supporting engineering evidence.
+          </p>
+
+          <button onclick="loadInvestigation()">
+            Re-run Investigation
+          </button>
+
+          <div id="status">
+            Investigation completed successfully.
+          </div>
+        </div>
+
+      </div>
+    `;
+
+  } catch (error) {
+    app.innerHTML = `
+      <div class="incident">
+        <span class="badge">ERROR</span>
+        <div class="title">Investigation unavailable</div>
+        <p>${error}</p>
+      </div>
+    `;
+  }
+}
+
+loadInvestigation();
+</script>
+
+</body>
+</html>
