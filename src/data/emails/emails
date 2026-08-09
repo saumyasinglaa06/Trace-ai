@@ -1,0 +1,91 @@
+export interface SupportEmail {
+  id: string;
+  customer: string;
+  email: string;
+  subject: string;
+  body: string;
+  timestamp: string;
+}
+
+export const supportEmails: SupportEmail[] = [
+  {
+    id: "E001",
+    customer: "Rahul Sharma",
+    email: "rahul@example.com",
+    subject: "Payment deducted but order failed",
+    body: "I was charged ₹2499 but my order shows as failed.",
+    timestamp: "2026-08-09T09:02:00Z",
+  },
+  {
+    id: "E002",
+    customer: "Ananya Mehta",
+    email: "ananya@example.com",
+    subject: "Money deducted from account",
+    body: "Payment was successful but the order wasn't created.",
+    timestamp: "2026-08-09T09:08:00Z",
+  },
+  {
+    id: "E003",
+    customer: "Arjun Kapoor",
+    email: "arjun@example.com",
+    subject: "Order failed after payment",
+    body: "The payment went through but my order says failed.",
+    timestamp: "2026-08-09T09:15:00Z",
+  },
+  {
+    id: "E004",
+    customer: "Priya Singh",
+    email: "priya@example.com",
+    subject: "Charged but nothing arrived",
+    body: "The money has left my bank account but I never received an order confirmation.",
+    timestamp: "2026-08-09T09:21:00Z",
+  },
+  {
+    id: "E005",
+    customer: "Rohan Gupta",
+    email: "rohan@example.com",
+    subject: "Payment successful, order missing",
+    body: "I received a payment confirmation but there is no order.",
+    timestamp: "2026-08-09T09:29:00Z",
+  },
+  {
+    id: "E006",
+    customer: "Sneha Verma",
+    email: "sneha@example.com",
+    subject: "Bank charged me",
+    body: "My bank shows a successful transaction, but the app says my purchase failed.",
+    timestamp: "2026-08-09T09:37:00Z",
+  },
+  {
+    id: "E007",
+    customer: "Karan Malhotra",
+    email: "karan@example.com",
+    subject: "Where is my order?",
+    body: "I paid for the product but the order disappeared after checkout.",
+    timestamp: "2026-08-09T09:44:00Z",
+  },
+  {
+    id: "E008",
+    customer: "Meera Joshi",
+    email: "meera@example.com",
+    subject: "Urgent payment problem",
+    body: "I was charged ₹1599 and immediately afterward the checkout failed.",
+    timestamp: "2026-08-09T09:52:00Z",
+  },
+  {
+    id: "E009",
+    customer: "Aditya Rao",
+    email: "aditya@example.com",
+    subject: "Transaction completed but purchase failed",
+    body: "The bank shows successful payment but your app says payment failed.",
+    timestamp: "2026-08-09T10:01:00Z",
+  },
+  {
+    id: "E010",
+    customer: "Isha Sharma",
+    email: "isha@example.com",
+    subject: "Payment deducted",
+    body: "Please help. Payment is deducted but there is no order.",
+    timestamp: "2026-08-09T10:09:00Z",
+  },
+];
